@@ -1,0 +1,84 @@
+﻿@model IEnumerable<ContactsApp.Models.ContactList>
+
+@{
+    ViewData["Title"] = "Contact List";
+}
+<style>
+    .btn-black {
+        background-color: black;
+        border-color: black;
+    }
+
+        .btn-black:hover {
+            background-color: darkslategray; 
+            border-color: darkslategray;
+        }
+</style>
+
+<div class="container">
+   
+    <p>
+        <a class="btn btn-primary btn-black" asp-action="Import">Import</a>
+    </p>
+    <p>
+        <a class="btn btn-primary btn-black" asp-action="Export">Export</a>
+    </p>
+    <p>
+        <a class="btn btn-primary btn-black" asp-action="Contact">Create New</a>
+    </p>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Number</th>
+                <th>Email</th>
+                <th>Location</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contact in Model)
+            {
+                <tr id="contactRow_@contact.Id">
+                    <td>@Html.DisplayFor(modelItem => contact.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => contact.Type)</td>
+                    <td>@Html.DisplayFor(modelItem => contact.Number)</td>
+                    <td>@Html.DisplayFor(modelItem => contact.Email)</td>
+                    <td>@Html.DisplayFor(modelItem => contact.Location)</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = contact.Id }, new { @class = "btn btn-warning btn-sm" })
+                        @*@Html.ActionLink("Delete", "Delete", new { id = contact.Id }, new { @class = "btn btn-danger btn-sm", onclick = "return confirm('Are you sure you want to delete this contact?');" })*@
+                        <a  class="btn btn-danger btn-sm" onclick="deleteContact(@contact.Id)">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function deleteContact(contactId) {
+        var confirmation = confirm('Are you sure you want to delete this contact?');
+        if (confirmation) {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("Delete", "Contacts")',
+                data: { Id: contactId },
+                success: function (data) {
+                    
+                    $('#contactRow_' + contactId).remove();
+                    alert('Contact deleted successfully.');
+                    
+                    
+                },
+                error: function () {
+                   
+                    alert('Error deleting contact.');
+                }
+            });
+        }
+    }
+</script>

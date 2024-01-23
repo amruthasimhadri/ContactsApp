@@ -1,0 +1,17 @@
+﻿@model IFormFile
+
+
+<form method="post" enctype="multipart/form-data" asp-controller="Contacts" asp-action="Import">
+    <h2>Import Data From Excel</h2>
+    <div class="form-group">
+        <label for="file">Select Excel File:</label>
+        <input type="file" name="file" id="file" class="form-control" />
+    </div>
+    <br />
+    <centre style="display:flex;justify-content:center"><button type="submit" class="btn btn-primary">Import Data</button></centre>
+</form>
+@if (ViewBag.Message != null)
+{
+    @ViewBag.Message
+}
+
